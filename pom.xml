@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev.harvey</groupId>
+  <groupId>io.github.huauauaa</groupId>
   <artifactId>ai-maven</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.1</version>
   <packaging>jar</packaging>
 
   <name>ai-maven</name>
@@ -67,20 +67,30 @@
 
   <!--
     发布前：mvn -Prelease clean verify（生成 -sources / -javadoc）；中央仓库还需 GPG：mvn -Prelease,sign clean deploy。
-    发布到私服或 GitHub Packages：取消注释并填写仓库 URL；在 ~/.m2/settings.xml 配置 server 凭据。
-    <distributionManagement>
-      <repository>
-        <id>your-repo-id</id>
-        <url>https://your.company/repository/maven-releases/</url>
-      </repository>
-      <snapshotRepository>
-        <id>your-repo-id</id>
-        <url>https://your.company/repository/maven-snapshots/</url>
-      </snapshotRepository>
-    </distributionManagement>
+    私服示例：在 pom 增加 distributionManagement，并在 ~/.m2/settings.xml 配置 <server> 凭据。
+    GitHub Packages：见 .github/workflows/publish-github-packages.yml（CI 中自动启用 github-packages profile）。
   -->
 
   <profiles>
+    <profile>
+      <id>github-packages</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_ACTIONS</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <distributionManagement>
+        <repository>
+          <id>github</id>
+          <url>https://maven.pkg.github.com/huauauaa/ai-maven</url>
+        </repository>
+        <snapshotRepository>
+          <id>github</id>
+          <url>https://maven.pkg.github.com/huauauaa/ai-maven</url>
+        </snapshotRepository>
+      </distributionManagement>
+    </profile>
     <profile>
       <id>release</id>
       <build>
@@ -132,6 +142,11 @@
                 <goals>
                   <goal>sign</goal>
                 </goals>
+                <configuration>
+                  <gpgArguments>
+                      <arg>--pinentry-mode</arg><arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
               </execution>
             </executions>
           </plugin>

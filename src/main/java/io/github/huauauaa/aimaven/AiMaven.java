@@ -1,4 +1,4 @@
-package dev.harvey.aimaven;
+package io.github.huauauaa.aimaven;
 
 /**
  * Entry point for the published library.

@@ -1,4 +1,4 @@
-package dev.harvey.aimaven;
+package io.github.huauauaa.aimaven;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
